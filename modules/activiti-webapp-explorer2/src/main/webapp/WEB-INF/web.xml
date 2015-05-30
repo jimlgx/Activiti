@@ -25,6 +25,7 @@
 
 	<filter>
 		<filter-name>UIFilter</filter-name>
+		<!--<filter-class>org.activiti.explorer.filter.ExplorerExtFilter</filter-class>-->
 		<filter-class>org.activiti.explorer.filter.ExplorerFilter</filter-class>
 	</filter>
   
@@ -33,11 +34,6 @@
         <filter-class>org.activiti.explorer.servlet.JsonpCallbackFilter</filter-class>
     </filter>
 
-	<filter-mapping>
-		<filter-name>UIFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-  
     <filter-mapping>
         <filter-name>JSONPFilter</filter-name>
         <url-pattern>/service/*</url-pattern>
@@ -61,6 +57,28 @@
 		<servlet-name>Vaadin Application Servlet</servlet-name>
 		<url-pattern>/VAADIN/*</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>H2Console</servlet-name>
+		<servlet-class>org.h2.server.web.WebServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>H2Console</servlet-name>
+		<url-pattern>/H2Console/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>DruidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DruidStatView</servlet-name>
+		<url-pattern>/druid/*</url-pattern>
+	</servlet-mapping>
+
+	<filter-mapping>
+		<filter-name>UIFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- Session timeout on one day -->
 	<session-config>
