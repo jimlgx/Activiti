@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +27,7 @@ import java.util.Map;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.util.CollectionUtil;
+import org.activiti.engine.impl.util.IoUtil;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -35,12 +37,14 @@ import org.activiti.workflow.simple.converter.WorkflowDefinitionConversion;
 import org.activiti.workflow.simple.converter.WorkflowDefinitionConversionFactory;
 import org.activiti.workflow.simple.converter.step.FeedbackStepDefinitionConverter;
 import org.activiti.workflow.simple.definition.WorkflowDefinition;
+import org.h2.store.fs.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.FileCopyUtils;
 
 /**
  * @author Joram Barrez
@@ -137,11 +141,22 @@ public class WorkflowConversionTest {
       .endParallel();
     
     // Validate
-    activitiRule.getRuntimeService().startProcessInstanceByKey(convertAndDeploy(workflowDefinition));
+    ProcessInstance processInstance = activitiRule.getRuntimeService().startProcessInstanceByKey(convertAndDeploy(workflowDefinition));
+    String deploymentId = processInstance.getDeploymentId();
     assertEquals(1, taskService.createTaskQuery().taskAssignee("kermit").count());
     assertEquals(1, taskService.createTaskQuery().taskAssignee("gonzo").count());
     assertEquals(1, taskService.createTaskQuery().taskAssignee("mispiggy").count());
-    
+
+    // 6. Save process diagram to a file
+    String processDefinitionId = processInstance.getProcessDefinitionId();
+    InputStream processDiagram = activitiRule.getRepositoryService().getProcessDiagram(processDefinitionId);
+//    FileUtils.copyInputStreamToFile(processDiagram, new File("target/diagram.png"));
+    FileCopyUtils.copy(FileCopyUtils.copyToByteArray(processDiagram),new File("target/diagram.png"));
+    // 7. Save resulting BPMN xml to a file
+    InputStream processBpmn = activitiRule.getRepositoryService().getResourceAsStream(deploymentId, processInstance.getProcessDefinitionId()+ ".bpmn20.xml");
+//    FileUtils.copyInputStreamToFile(processBpmn, new File("target/process.bpmn20.xml"));
+    FileCopyUtils.copy(FileCopyUtils.copyToByteArray(processBpmn),new File("target/process.bpmn20.xml"));
+
     // Complete tasks
     for (Task task : taskService.createTaskQuery().list()) {
       activitiRule.getTaskService().complete(task.getId());
@@ -154,6 +169,8 @@ public class WorkflowConversionTest {
     
     // There should be two task open now for gonzo
     assertEquals(2, taskService.createTaskQuery().taskAssignee("gonzo").count());
+
+
   }
   
   @Test
