@@ -25,8 +25,8 @@
 
 	<filter>
 		<filter-name>UIFilter</filter-name>
-		<!--<filter-class>org.activiti.explorer.filter.ExplorerExtFilter</filter-class>-->
-		<filter-class>org.activiti.explorer.filter.ExplorerFilter</filter-class>
+		<filter-class>org.activiti.explorer.filter.ExplorerExtFilter</filter-class>
+		<!--<filter-class>org.activiti.explorer.filter.ExplorerFilter</filter-class>-->
 	</filter>
   
     <filter>

@@ -19,6 +19,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <code>ExplorerExtFilter</code>
  *
@@ -27,12 +30,16 @@ import javax.servlet.http.HttpServletRequest;
  * @since 1.0 2015-05-30
  */
 public class ExplorerExtFilter extends ExplorerFilter {
-    private List<String> ignoreList = new ArrayList<String>();
+    private static final Logger LOG = LoggerFactory
+            .getLogger(ExplorerExtFilter.class);
+
+    private List<String> ignoreExtList = new ArrayList<String>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        ignoreList.add("/druid");
-        ignoreList.add("/H2Console");
+        super.init(filterConfig);
+        ignoreExtList.add("/druid");
+        ignoreExtList.add("/H2Console");
 
     }
     @Override
@@ -57,7 +64,7 @@ public class ExplorerExtFilter extends ExplorerFilter {
 
     private boolean isMatch(String firstPart) {
 
-        return ignoreList.contains(firstPart);
+        return ignoreExtList.contains(firstPart);
     }
 
 
