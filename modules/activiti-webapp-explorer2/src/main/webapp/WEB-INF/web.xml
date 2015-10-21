@@ -50,7 +50,7 @@
 
 	<servlet-mapping>
 		<servlet-name>Vaadin Application Servlet</servlet-name>
-		<url-pattern>/ui/*</url-pattern>
+		<url-pattern>/ui/explorer2/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -74,10 +74,9 @@
 		<servlet-name>DruidStatView</servlet-name>
 		<url-pattern>/druid/*</url-pattern>
 	</servlet-mapping>
-
 	<filter-mapping>
 		<filter-name>UIFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/explorer2/*</url-pattern>
 	</filter-mapping>
 
 	<!-- Session timeout on one day -->
