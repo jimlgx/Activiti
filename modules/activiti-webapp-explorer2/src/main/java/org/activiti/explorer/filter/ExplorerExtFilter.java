@@ -31,6 +31,8 @@ public class ExplorerExtFilter extends ExplorerFilter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        super.init(filterConfig);
+
         ignoreList.add("/druid");
         ignoreList.add("/H2Console");
 
