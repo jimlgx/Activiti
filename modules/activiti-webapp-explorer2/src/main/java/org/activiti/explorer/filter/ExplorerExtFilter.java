@@ -83,7 +83,7 @@ public class ExplorerExtFilter extends ExplorerFilter {
         String firstPart = StringUtils.substringBefore(path,"/");
         if (ignoreExtList.contains(firstPart)) {
             chain.doFilter(request, response); // Goes to default servlet.
-        } else if(!EXPLORER2.equals(path)&&!EXPLORER2_.equals(path) && StringUtils.startsWith(path, EXPLORER2)) {
+        } else if(!(EXPLORER2.equals(path)||EXPLORER2_.equals(path)) && StringUtils.startsWith(path, EXPLORER2)) {
             String path2 = StringUtils.removeStart(path, EXPLORER2);
             String path３ = StringUtils.substringBefore(path2,"/");
             if(ignoreExtList.contains(path３)){
